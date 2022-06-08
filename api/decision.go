@@ -49,20 +49,20 @@ type decisionHandlerRegistry interface {
 }
 
 type DecisionHandler struct {
-	r decisionHandlerRegistry
+	xForwardedHeadersEnabled bool
+	r                        decisionHandlerRegistry
 }
 
-func NewJudgeHandler(r decisionHandlerRegistry) *DecisionHandler {
-	return &DecisionHandler{r: r}
+func NewJudgeHandler(r decisionHandlerRegistry, xForwardedHeadersEnabled bool) *DecisionHandler {
+	return &DecisionHandler{r: r, xForwardedHeadersEnabled: xForwardedHeadersEnabled}
 }
 
 func (h *DecisionHandler) ServeHTTP(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	if len(r.URL.Path) >= len(DecisionPath) && r.URL.Path[:len(DecisionPath)] == DecisionPath {
-		r.Method = x.OrDefaultString(r.Header.Get(xForwardedMethod), r.Method)
-		r.URL.Scheme = x.OrDefaultString(r.Header.Get(xForwardedProto),
-			x.IfThenElseString(r.TLS != nil, "https", "http"))
-		r.URL.Host = x.OrDefaultString(r.Header.Get(xForwardedHost), r.Host)
-		r.URL.Path = x.OrDefaultString(r.Header.Get(xForwardedUri), r.URL.Path[len(DecisionPath):])
+		r.Method = x.IfThenElseWithDefaultString(h.xForwardedHeadersEnabled, r.Header.Get(xForwardedMethod), r.Method)
+		r.URL.Scheme = x.IfThenElseWithDefaultString(h.xForwardedHeadersEnabled, r.Header.Get(xForwardedProto), x.IfThenElseString(r.TLS != nil, "https", "http"))
+		r.URL.Host = x.IfThenElseWithDefaultString(h.xForwardedHeadersEnabled, r.Header.Get(xForwardedHost), r.Host)
+		r.URL.Path = x.IfThenElseWithDefaultString(h.xForwardedHeadersEnabled, r.Header.Get(xForwardedUri), r.URL.Path[len(DecisionPath):])
 
 		h.decisions(w, r)
 	} else {

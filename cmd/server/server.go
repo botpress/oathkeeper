@@ -186,11 +186,13 @@ func isDevelopment(c configuration.Provider) bool {
 
 func RunServe(version, build, date string) func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
-		fmt.Println(banner(version))
-
 		logger := logrusx.New("ORY Oathkeeper", version)
 		d := driver.NewDefaultDriver(logger, version, build, date)
 		d.Registry().Init()
+
+		if d.Configuration().OryBannerIsEnabled() {
+			fmt.Println(banner(version))
+		}
 
 		adminmw := negroni.New()
 		publicmw := negroni.New()

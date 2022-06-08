@@ -33,6 +33,10 @@ type Provider interface {
 	CORSEnabled(iface string) bool
 	CORSOptions(iface string) cors.Options
 
+	OryBannerIsEnabled() bool
+
+	DecisionsXForwardedHeaderEnabled() bool
+
 	ProviderAuthenticators
 	ProviderErrorHandlers
 	ProviderAuthorizers

@@ -48,12 +48,18 @@ const (
 	ViperKeyAPIReadTimeout                      = "serve.api.timeout.read"
 	ViperKeyAPIWriteTimeout                     = "serve.api.timeout.write"
 	ViperKeyAPIIdleTimeout                      = "serve.api.timeout.idle"
+	ViperKeyOryBannerIsEnabled                  = "serve.banner.enabled"
 	ViperKeyPrometheusServeAddressHost          = "serve.prometheus.host"
 	ViperKeyPrometheusServeAddressPort          = "serve.prometheus.port"
 	ViperKeyPrometheusServeMetricsPath          = "serve.prometheus.metrics_path"
 	ViperKeyPrometheusServeCollapseRequestPaths = "serve.prometheus.collapse_request_paths"
 	ViperKeyAccessRuleRepositories              = "access_rules.repositories"
 	ViperKeyAccessRuleMatchingStrategy          = "access_rules.matching_strategy"
+)
+
+// Decisions
+const (
+	ViperKeyDecisionsXForwardedHeadersEnabled = "decisions.x_forwarded_headers.enabled"
 )
 
 // Authorizers
@@ -144,6 +150,14 @@ func (v *ViperProvider) AccessRuleRepositories() []url.URL {
 	}
 
 	return repositories
+}
+
+func (v *ViperProvider) OryBannerIsEnabled() bool {
+	return viperx.GetBool(v.l, ViperKeyOryBannerIsEnabled, true)
+}
+
+func (v *ViperProvider) DecisionsXForwardedHeaderEnabled() bool {
+	return viperx.GetBool(v.l, ViperKeyDecisionsXForwardedHeadersEnabled, true)
 }
 
 // AccessRuleMatchingStrategy returns current MatchingStrategy.
