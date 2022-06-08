@@ -13,3 +13,7 @@ func IfThenElseString(c bool, thenVal, elseVal string) string {
 	}
 	return elseVal
 }
+
+func IfThenElseWithDefaultString(c bool, thenVal, defaultVal string) string {
+	return IfThenElseString(c, OrDefaultString(thenVal, defaultVal), defaultVal)
+}

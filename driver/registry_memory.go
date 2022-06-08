@@ -200,7 +200,7 @@ func (r *RegistryMemory) RuleHandler() *api.RuleHandler {
 
 func (r *RegistryMemory) DecisionHandler() *api.DecisionHandler {
 	if r.apiJudgeHandler == nil {
-		r.apiJudgeHandler = api.NewJudgeHandler(r)
+		r.apiJudgeHandler = api.NewJudgeHandler(r, r.c.DecisionsXForwardedHeaderEnabled())
 	}
 	return r.apiJudgeHandler
 }
