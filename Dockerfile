@@ -13,12 +13,13 @@ RUN packr2
 RUN go mod download && go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
 
-FROM scratch
+FROM alpine:3.16.0
 
 COPY --from=0 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=0 /app/oathkeeper /usr/bin/oathkeeper
+COPY --from=hairyhenderson/gomplate:stable /gomplate /usr/bin/gomplate
+COPY oathkeeper.yml /.oathkeeper.tpl.yaml
+COPY entrypoint.sh /etc/entrypoint.sh
 
-USER 1000
-
-ENTRYPOINT ["oathkeeper"]
+ENTRYPOINT ["/etc/entrypoint.sh"]
 CMD ["serve"]
