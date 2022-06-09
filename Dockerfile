@@ -21,5 +21,7 @@ COPY --from=hairyhenderson/gomplate:stable /gomplate /usr/bin/gomplate
 COPY oathkeeper.yml /.oathkeeper.tpl.yaml
 COPY entrypoint.sh /etc/entrypoint.sh
 
+RUN chmod +x /etc/entrypoint.sh
+
 ENTRYPOINT ["/etc/entrypoint.sh"]
 CMD ["serve"]
