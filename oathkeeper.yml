@@ -1,1 +1,1 @@
-{{ env.Getenv "OATHKEEPER_CONFIG" | base64.Decode }}
+{ { env.Getenv "OATHKEEPER_CONFIG" | base64.Decode } }
