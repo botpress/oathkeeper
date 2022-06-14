@@ -1142,6 +1142,19 @@
             }
           }
         },
+        "banner": {
+          "type": "object",
+          "title": "Ory Server Banner",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "title": "Enabled",
+              "description": "Enables the Ory server banner."
+            }
+          }
+        },
         "proxy": {
           "type": "object",
           "title": "HTTP Reverse Proxy",
@@ -1200,6 +1213,25 @@
               "default": true,
               "title": "CollapsePaths",
               "description": "When set to true the request label will include just the first segment of the request path"
+            }
+          }
+        }
+      }
+    },
+    "decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x_forwarded_headers": {
+          "type": "object",
+          "title": "X Forwarded Headers",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "title": "Enabled",
+              "description": "Enables the X Forwarded Headers for the decisions api."
             }
           }
         }
